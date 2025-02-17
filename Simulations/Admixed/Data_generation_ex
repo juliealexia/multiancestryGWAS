@@ -1,0 +1,54 @@
+#### Admix-kit simulation example: 50/50 admixture
+
+# admix admix-simu \
+# --pfile-list "['/n/holystore01/LABS/xlin/Everyone/JD_HZ/admixpop/EUR', '/n/holystore01/LABS/xlin/Everyone/JD_HZ/admixpop/AFR']" \
+# --admix-prop "[0.5,0.5]" \
+# --n-indiv 120000 \
+# --n-gen 1 \
+# --build hg38 \
+# --out /n/holystore01/LABS/xlin/Everyone/JD_HZ/admixpop/AFR-EUR
+# 
+# 
+# BUILD=hg38
+# CHROM=22
+# N_INDIV=120000
+# N_GEN=10
+# 
+# admix subset-hapmap3 \
+# --pfile data/1kg-ref-${BUILD}/pgen/all_chr \
+# --build ${BUILD} \
+# --chrom ${CHROM} \
+# --out data/ancestry/hm3_chrom${CHROM}.snp
+# 
+# for pop in CEU YRI; do
+# admix subset-pop-indiv \
+# --pfile data/1kg-ref-${BUILD}/pgen/all_chr \
+# --pop ${pop} \
+# --out data/ancestry/${pop}.indiv
+# done
+# 
+# for pop in CEU YRI; do
+# /n/home12/jdias/plink2 --pfile data/1kg-ref-${BUILD}/pgen/all_chr \
+# --keep data/ancestry/${pop}.indiv \
+# --extract data/ancestry/hm3_chrom${CHROM}.snp \
+# --make-pgen \
+# --out data/ancestry/${pop}
+# done
+# 
+# 
+# for pop in CEU YRI; do
+# admix hapgen2 \
+# --pfile data/ancestry/${pop} \
+# --n-indiv ${N_INDIV} \
+# --out data/ancestry/${pop}.chrom${CHROM}.hapgen2 \
+# --build ${BUILD}
+# done
+# 
+# 
+# admix admix-simu \
+# --pfile-list "['data/ancestry/CEU.chrom${CHROM}.hapgen2', 'data/ancestry/YRI.chrom${CHROM}.hapgen2']" \
+# --admix-prop “[0.5,0.5]” \
+# --n-indiv ${N_INDIV} \
+# --n-gen ${N_GEN} \
+# --build ${BUILD} \
+# --out data/YRI-CEU.chrom${CHROM}
